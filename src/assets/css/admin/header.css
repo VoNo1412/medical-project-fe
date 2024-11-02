@@ -1,0 +1,52 @@
+/* src/components/admin/header.css */
+
+/* Header Styles */
+.header {
+    background-color: #7ed0ff;
+    /* Màu nền xanh cho Header */
+    color: white;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Giữ khoảng cách giữa các phần tử */
+}
+
+.header .btn {
+    color: white;
+    border: 1px solid #6c757d;
+    margin-left: 8px;
+    /* Khoảng cách giữa các nút */
+}
+
+.header .btn:hover {
+    background-color: #62aeff;
+    /* Màu nền khi hover */
+    border-color: #6c757d;
+}
+
+/* Profile Form Styles */
+.profile-form {
+    background-color: #ffffff;
+    /* Màu nền trắng cho form */
+    border: 1px solid #ced4da;
+    /* Đường viền */
+    border-radius: 0.25rem;
+    /* Bo tròn góc */
+    padding: 1rem;
+    /* Padding cho form */
+    position: absolute;
+    /* Đặt form bên dưới nút profile */
+    right: 20px;
+    /* Căn phải */
+    top: 50px;
+    /* Hạ thấp vị trí của form */
+    z-index: 1000;
+    /* Đảm bảo form nằm trên các phần khác */
+}
+.header img {
+    height: 40px;
+    /* Điều chỉnh chiều cao cho hình ảnh */
+    width: auto;
+    /* Giữ tỷ lệ chiều rộng tự động */
+}
