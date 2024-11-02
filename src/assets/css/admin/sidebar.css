@@ -21,7 +21,7 @@
 }
 
 .sidebar .nav-link {
-    color: #ffffff;
+    color: #000;
     /* Màu chữ */
     padding: 10px;
     /* Padding cho các mục */
@@ -45,4 +45,5 @@
     /* Màu nền cho mục đang hoạt động */
     font-weight: bold;
     /* Làm đậm chữ cho mục đang hoạt động */
+    color: #fff;
 }
