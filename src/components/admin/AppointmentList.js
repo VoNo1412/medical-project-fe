@@ -19,21 +19,21 @@ const AppointmentList = () => {
 
     return (
         <div>
-            <h3>Booked Appointments</h3>
+            <h3>Danh sách đặt lịch</h3>
             <table className="table">
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Full Name</th>
-                    <th>Phone</th>
-                    <th>Address</th>
-                    <th>Gender</th>
-                    <th>Birth Year</th>
-                    <th>Appointment Date</th>
-                    <th>Appointment Time</th>
-                    <th>Doctor</th>
-                    <th>Content</th>
-                    <th>Created At</th>
+                    <th>Họ và tên</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th>Giới tính</th>
+                    <th>Năm sinh</th>
+                    <th>Ngày hẹn</th>
+                    <th>Giờ hẹn</th>
+                    <th>Bác sĩ</th>
+                    <th>Nội dung</th>
+                    <th>Ngày tạo</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -45,11 +45,11 @@ const AppointmentList = () => {
                         <td>{appointment.address}</td>
                         <td>{appointment.gender}</td>
                         <td>{appointment.birth_year}</td>
-                        <td>{appointment.appointment_date}</td>
+                        <td>{new Date(appointment.appointment_date).toLocaleDateString('en-GB')}</td>
                         <td>{appointment.appointment_time}</td>
                         <td>{appointment.doctor_name}</td>
                         <td>{appointment.content}</td>
-                        <td>{appointment.created_at}</td>
+                        <td>{new Date(appointment.appointment_date).toLocaleString('en-GB')}</td>
                     </tr>
                 ))}
                 </tbody>
