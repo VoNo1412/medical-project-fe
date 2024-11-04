@@ -9,7 +9,7 @@ const GetForm = () => {
     fullname: '',
     phone: '',
     address: '',
-    gender: '',
+    gender: 'Nam', // Set default value to 'Nam'
     birthYear: '',
     content: '',
     appointmentDate: '',
@@ -65,6 +65,8 @@ const GetForm = () => {
       toast.error('An error occurred while submitting the form', { autoClose: 3000 });
     }
   };
+
+  const today = new Date().toISOString().split('T')[0];
 
   return (
       <section id="contact" className="contact">
@@ -149,6 +151,7 @@ const GetForm = () => {
                 required
                 value={formData.appointmentDate}
                 onChange={handleChange}
+                min={today}
             />
 
             <label htmlFor="appointmentTime">Giờ hẹn:</label>

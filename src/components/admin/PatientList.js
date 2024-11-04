@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const UserList = () => {
+const PatientList = () => {
     const [users, setUsers] = useState([]);
     const [editingUser, setEditingUser] = useState(null);
     const [newUser, setNewUser] = useState({ username: '', password: '', fullname: '', phone: '', address: '', gender: '', birth_year: '' });
@@ -11,7 +11,7 @@ const UserList = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/users');
+                const response = await axios.get('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/patients');
                 setUsers(response.data);
             } catch (error) {
                 console.error('Lỗi khi lấy danh sách người dùng:', error);
@@ -39,7 +39,7 @@ const UserList = () => {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/users/${formData.id}`, formData);
+            await axios.put(`https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/patients/${formData.id}`, formData);
             setUsers(users.map(user => user.id === formData.id ? { ...user, ...formData } : user));
             setEditingUser(null);
             window.location.reload()
@@ -50,7 +50,7 @@ const UserList = () => {
 
     const handleDeleteClick = async (id) => {
         try {
-            await axios.delete(`https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/users/${id}`);
+            await axios.delete(`https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/patients/${id}`);
             setUsers(users.filter(user => user.id !== id));
         } catch (error) {
             console.error('Lỗi khi xóa người dùng:', error);
@@ -60,7 +60,7 @@ const UserList = () => {
     const handleAddUser = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/users', newUser);
+            const response = await axios.post('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/patients', newUser);
             setUsers([...users, response.data]);
             setNewUser({ username: '', password: '', fullname: '', phone: '', address: '', gender: '', birth_year: '' });
             setShowAddUserForm(false);
@@ -250,4 +250,4 @@ const UserList = () => {
     );
 };
 
-export default UserList;
+export default PatientList;

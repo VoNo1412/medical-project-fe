@@ -80,8 +80,10 @@ const SpecialtyList = () => {
                             required
                         />
                     </div>
-                    <button type="submit">{editingSpecialty.id ? 'Lưu' : 'Thêm'}</button>
-                    <button type="button" onClick={() => setEditingSpecialty(null)}>Hủy</button>
+                    <div className="d-flex justify-content-center">
+                        <button className="w-25 m-3" type="submit">{editingSpecialty.id ? 'Lưu' : 'Thêm'}</button>
+                        <button className="w-25 m-3" type="button" onClick={() => setEditingSpecialty(null)}>Hủy</button>
+                    </div>
                 </form>
             )}
             <table className="table">

@@ -105,7 +105,8 @@ const DoctorList = () => {
                                onChange={handleInputChange} required/>
                         <input type="text" name="fullname" placeholder="Họ và Tên" value={newDoctor.fullname}
                                onChange={handleInputChange} required/>
-                        <select className="form-control mb-3" name="specialty" value={newDoctor.specialty} onChange={handleInputChange} required>
+                        <select className="form-control mb-3" name="specialty" value={newDoctor.specialty}
+                                onChange={handleInputChange} required>
                             <option value="">Chọn Chuyên Khoa</option>
                             {specialties.map(specialty => (
                                 <option key={specialty.id} value={specialty.id}>{specialty.name}</option>
@@ -115,14 +116,19 @@ const DoctorList = () => {
                                onChange={handleInputChange} required/>
                         <input type="text" name="address" placeholder="Địa Chỉ" value={newDoctor.address}
                                onChange={handleInputChange} required/>
-                        <select className="form-control mb-3" name="gender" value={newDoctor.gender} onChange={handleInputChange} required>
+                        <select className="form-control mb-3" name="gender" value={newDoctor.gender}
+                                onChange={handleInputChange} required>
                             <option value="">Chọn Giới Tính</option>
                             <option value="0">Nam</option>
                             <option value="1">Nữ</option>
                         </select>
                         <input type="number" name="birth_year" placeholder="Năm Sinh" value={newDoctor.birth_year}
                                onChange={handleInputChange} required/>
-                        <button type="submit">Thêm</button>
+                        <div className="d-flex justify-content-center">
+                            <button className="w-25 m-3" type="submit">Thêm</button>
+                            <button className="w-25 m-3" type="button" onClick={() => setShowAddForm(false)}>Hủy
+                            </button>
+                        </div>
                     </form>
                 </div>
             )}
@@ -170,22 +176,36 @@ const DoctorList = () => {
                         e.preventDefault();
                         handleUpdateDoctor();
                     }}>
-                        <input type="text" name="fullname" placeholder="Họ và Tên" value={editingDoctor.fullname} onChange={(e) => setEditingDoctor({ ...editingDoctor, fullname: e.target.value })} required />
-                        <select className="form-control mb-3" name="specialty" value={editingDoctor.specialty} onChange={(e) => setEditingDoctor({ ...editingDoctor, specialty: e.target.value })} required>
+                        <input type="text" name="fullname" placeholder="Họ và Tên" value={editingDoctor.fullname}
+                               onChange={(e) => setEditingDoctor({...editingDoctor, fullname: e.target.value})}
+                               required/>
+                        <select className="form-control mb-3" name="specialty" value={editingDoctor.specialty}
+                                onChange={(e) => setEditingDoctor({...editingDoctor, specialty: e.target.value})}
+                                required>
                             <option value="">Chọn Chuyên Khoa</option>
                             {specialties.map(specialty => (
                                 <option key={specialty.id} value={specialty.id}>{specialty.name}</option>
                             ))}
                         </select>
-                        <input type="text" name="phone" placeholder="Số Điện Thoại" value={editingDoctor.phone} onChange={(e) => setEditingDoctor({ ...editingDoctor, phone: e.target.value })} required />
-                        <input type="text" name="address" placeholder="Địa Chỉ" value={editingDoctor.address} onChange={(e) => setEditingDoctor({ ...editingDoctor, address: e.target.value })} required />
-                        <select className="form-control mb-3" name="gender" value={editingDoctor.gender} onChange={(e) => setEditingDoctor({ ...editingDoctor, gender: e.target.value })} required>
+                        <input type="text" name="phone" placeholder="Số Điện Thoại" value={editingDoctor.phone}
+                               onChange={(e) => setEditingDoctor({...editingDoctor, phone: e.target.value})} required/>
+                        <input type="text" name="address" placeholder="Địa Chỉ" value={editingDoctor.address}
+                               onChange={(e) => setEditingDoctor({...editingDoctor, address: e.target.value})}
+                               required/>
+                        <select className="form-control mb-3" name="gender" value={editingDoctor.gender}
+                                onChange={(e) => setEditingDoctor({...editingDoctor, gender: e.target.value})} required>
                             <option value="">Chọn Giới Tính</option>
                             <option value="0">Nam</option>
                             <option value="1">Nữ</option>
                         </select>
-                        <input type="number" name="birth_year" placeholder="Năm Sinh" value={editingDoctor.birth_year} onChange={(e) => setEditingDoctor({ ...editingDoctor, birth_year: e.target.value })} required />
-                        <button type="submit">Cập Nhật</button>
+                        <input type="number" name="birth_year" placeholder="Năm Sinh" value={editingDoctor.birth_year}
+                               onChange={(e) => setEditingDoctor({...editingDoctor, birth_year: e.target.value})}
+                               required/>
+                        <div className="d-flex justify-content-center">
+                            <button className="w-25 m-3" type="submit">Cập Nhật</button>
+                            <button className="w-25 m-3" type="button" onClick={() => setEditingDoctor(null)}>Hủy
+                            </button>
+                        </div>
                     </form>
                 </div>
             )}
