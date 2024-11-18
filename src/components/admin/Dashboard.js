@@ -16,11 +16,11 @@ const Dashboard = () => {
         const fetchStats = async () => {
             try {
                 const [patientsRes, doctorsRes, appointmentsRes, specialtiesRes, medicalRecordsRes] = await Promise.all([
-                    axios.get('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/patients'),
-                    axios.get('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/doctors'),
-                    axios.get('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/appointments'),
-                    axios.get('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/specialties'),
-                    axios.get('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/medical-records')
+                    axios.get('http://localhost:8080/patients'),
+                    axios.get('http://localhost:8080/doctors'),
+                    axios.get('http://localhost:8080/appointments'),
+                    axios.get('http://localhost:8080/specialties'),
+                    axios.get('http://localhost:8080/medical-records')
                 ]);
 
                 setStats({
@@ -69,7 +69,7 @@ const Dashboard = () => {
                 <div className="col-md-4">
                     <div className="card">
                         <div className="card-body">
-                            <h4 className="card-title">Chuyên khoa</h4>
+                            <h4 className="card-title">Dịch vụ</h4>
                             <p className="card-text">{stats.specialties}</p>
                         </div>
                     </div>

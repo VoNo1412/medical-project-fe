@@ -22,7 +22,7 @@
     max-width: 50%;
     height: auto;
     border-radius: 5px;
-    border: 2px solid rgb(0, 0, 0);
+    border: 1px solid rgb(94, 94, 94);
 }
 
 #login form {
@@ -57,6 +57,13 @@
     background-color: #094ba0;
 }
 
+#login button:disabled {
+    background-color: #ccc;
+    /* Màu nền cho nút bị vô hiệu hóa */
+    cursor: not-allowed;
+    /* Thay đổi con trỏ khi không thể nhấn */
+}
+
 #login p {
     margin-top: 20px;
 }
@@ -79,4 +86,22 @@
     color: #d9534f;
     /* Màu đỏ cho thông báo lỗi */
     text-align: center;
+}
+
+/* CSS cho phần tải dữ liệu */
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    /* Canh giữa phần tử */
+    align-items: center;
+    /* Canh giữa phần tử theo chiều dọc */
+    margin-top: 20px;
+    /* Khoảng cách trên phần tử tải */
+}
+
+.loading-spinner svg {
+    width: 50px;
+    /* Chiều rộng biểu tượng tải */
+    height: 50px;
+    /* Chiều cao biểu tượng tải */
 }

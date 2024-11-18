@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import '../../assets/css/admin/sidebar.css';
 
 const PatientList = () => {
     const [users, setUsers] = useState([]);
@@ -11,7 +12,7 @@ const PatientList = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/patients');
+                const response = await axios.get('http://localhost:8080/patients');
                 setUsers(response.data);
             } catch (error) {
                 console.error('Lỗi khi lấy danh sách người dùng:', error);
@@ -39,7 +40,7 @@ const PatientList = () => {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/patients/${formData.id}`, formData);
+            await axios.put(`http://localhost:8080/patients/${formData.id}`, formData);
             setUsers(users.map(user => user.id === formData.id ? { ...user, ...formData } : user));
             setEditingUser(null);
             window.location.reload()
@@ -50,7 +51,7 @@ const PatientList = () => {
 
     const handleDeleteClick = async (id) => {
         try {
-            await axios.delete(`https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/patients/${id}`);
+            await axios.delete(`http://localhost:8080/patients/${id}`);
             setUsers(users.filter(user => user.id !== id));
         } catch (error) {
             console.error('Lỗi khi xóa người dùng:', error);
@@ -60,7 +61,7 @@ const PatientList = () => {
     const handleAddUser = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/patients', newUser);
+            const response = await axios.post('http://localhost:8080/patients', newUser);
             setUsers([...users, response.data]);
             setNewUser({ username: '', password: '', fullname: '', phone: '', address: '', gender: '', birth_year: '' });
             setShowAddUserForm(false);
@@ -72,7 +73,7 @@ const PatientList = () => {
 
     return (
         <div>
-            <h3>Quản lý bệnh nhân</h3>
+            <h3>Quản lý người dùng</h3>
             <button className="btn btn-primary my-3" onClick={() => setShowAddUserForm(!showAddUserForm)}>Thêm người dùng</button>
             {showAddUserForm && (
                 <form onSubmit={handleAddUser}>
@@ -215,7 +216,6 @@ const PatientList = () => {
                 <table className="table">
                     <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Tên đăng nhập</th>
                         <th>Họ và tên</th>
                         <th>Số điện thoại</th>
@@ -227,20 +227,28 @@ const PatientList = () => {
                     <tbody>
                     {users.map((user) => (
                         <tr key={user.id}>
-                            <td>{user.id}</td>
                             <td>{user.username}</td>
                             <td>{user.fullname}</td>
                             <td>{user.phone}</td>
                             <td>{user.gender === 1 ? 'Nam' : 'Nữ'}</td>
                             <td>{user.birth_year}</td>
                             <td>
-                                <button className="btn btn-primary m-2" onClick={() => handleEditClick(user)}>Sửa</button>
-                                <button className="btn btn-warning" onClick={() => {
-                                    if (window.confirm('Bạn có chắc chắn muốn xóa người dùng này không?')) {
-                                        handleDeleteClick(user.id);
-                                    }
-                                }}>Xóa</button>
+                                <button className="btn-icon edit-icon m-2" onClick={() => handleEditClick(user)} title="Sửa">
+                                    <i className="bi bi-pencil-fill"></i>
+                                </button>
+                                <button
+                                    className="btn-icon delete-icon"
+                                    onClick={() => {
+                                        if (window.confirm('Bạn có chắc chắn muốn xóa người dùng này không?')) {
+                                            handleDeleteClick(user.id);
+                                        }
+                                    }}
+                                    title="Xóa"
+                                >
+                                    <i className="bi bi-trash-fill"></i>
+                                </button>
                             </td>
+
                         </tr>
                     ))}
                     </tbody>

@@ -1,22 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-
-const SpecialtyList = () => {
+const ServiceList = () => {
+    const [services, setServices] = useState([]);
     const [specialties, setSpecialties] = useState([]);
-    const [formData, setFormData] = useState({ name: '', description: '', image: null });
-    const [editingSpecialty, setEditingSpecialty] = useState(null);
+    const [formData, setFormData] = useState({ specialty_id: '', name: '', description: '', price: '' });
+    const [editingService, setEditingService] = useState(null);
 
     useEffect(() => {
+        const fetchServices = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/services');
+                setServices(response.data);
+            } catch (error) {
+                console.error('Error fetching services:', error);
+            }
+        };
+
         const fetchSpecialties = async () => {
             try {
-                const response = await axios.get('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/specialties');
+                const response = await axios.get('http://localhost:8080/specialties');
                 setSpecialties(response.data);
             } catch (error) {
                 console.error('Error fetching specialties:', error);
             }
         };
 
+        fetchServices();
         fetchSpecialties();
     }, []);
 
@@ -25,77 +35,67 @@ const SpecialtyList = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleFileChange = (e) => {
-        setFormData({ ...formData, image: e.target.files[0] });
-    };
-
     const handleCreateSubmit = async (e) => {
         e.preventDefault();
-        const data = new FormData();
-        data.append('name', formData.name);
-        data.append('description', formData.description);
-        if (formData.image) {
-            data.append('image', formData.image);
-        }
-
         try {
-            await axios.post('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/specialties', data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            setFormData({ name: '', description: '', image: null });
-            const response = await axios.get('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/specialties');
-            setSpecialties(response.data);
+            await axios.post('http://localhost:8080/services', formData);
+            setFormData({ specialty_id: '', name: '', description: '', price: '' });
+            const response = await axios.get('http://localhost:8080/services');
+            setServices(response.data);
         } catch (error) {
-            console.error('Error creating specialty:', error);
+            console.error('Error creating service:', error);
         }
     };
 
     const handleEditSubmit = async (e) => {
         e.preventDefault();
-        const data = new FormData();
-        data.append('name', formData.name);
-        data.append('description', formData.description);
-        if (formData.image) {
-            data.append('image', formData.image);
-        }
-
         try {
-            await axios.put(`https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/specialties/${editingSpecialty.id}`, data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            setFormData({ name: '', description: '', image: null });
-            setEditingSpecialty(null);
-            const response = await axios.get('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/specialties');
-            setSpecialties(response.data);
+            await axios.put(`http://localhost:8080/services/${editingService.id}`, formData);
+            setFormData({ specialty_id: '', name: '', description: '', price: '' });
+            setEditingService(null);
+            const response = await axios.get('http://localhost:8080/services');
+            setServices(response.data);
         } catch (error) {
-            console.error('Error editing specialty:', error);
+            console.error('Error editing service:', error);
         }
     };
 
-    const handleEditClick = (specialty) => {
-        setFormData({ name: specialty.name, description: specialty.description, image: null });
-        setEditingSpecialty(specialty);
+    const handleEditClick = (service) => {
+        setFormData({ specialty_id: service.specialty_id, name: service.name, description: service.description, price: service.price });
+        setEditingService(service);
     };
 
-    const handleDeleteSpecialty = async (id) => {
+    const handleDeleteService = async (id) => {
         try {
-            await axios.delete(`https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/specialties/${id}`);
-            setSpecialties(specialties.filter(specialty => specialty.id !== id));
+            await axios.delete(`http://localhost:8080/services/${id}`);
+            setServices(services.filter(service => service.id !== id));
         } catch (error) {
-            console.error('Error deleting specialty:', error);
+            console.error('Error deleting service:', error);
         }
     };
 
     return (
         <div>
             <h3>Quản lý dịch vụ</h3>
-            <button className="btn btn-primary my-3" onClick={() => setEditingSpecialty({})}>Thêm</button>
-            {editingSpecialty && (
-                <form onSubmit={editingSpecialty.id ? handleEditSubmit : handleCreateSubmit}>
+            <button className="btn btn-primary my-3" onClick={() => setEditingService({})}>Thêm</button>
+            {editingService && (
+                <form onSubmit={editingService.id ? handleEditSubmit : handleCreateSubmit}>
+                    <div>
+                        <label>Chuyên khoa</label>
+                        <select
+                            name="specialty_id"
+                            value={formData.specialty_id}
+                            onChange={handleInputChange}
+                            required
+                        >
+                            <option value="">Chọn chuyên khoa</option>
+                            {specialties.map((specialty) => (
+                                <option key={specialty.id} value={specialty.id}>
+                                    {specialty.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                     <div>
                         <label>Tên</label>
                         <input
@@ -117,50 +117,58 @@ const SpecialtyList = () => {
                         />
                     </div>
                     <div>
-                        <label>Hình ảnh</label>
+                        <label>Giá</label>
                         <input
-                            type="file"
-                            name="image"
-                            onChange={handleFileChange}
+                            type="number"
+                            name="price"
+                            value={formData.price}
+                            onChange={handleInputChange}
+                            required
                         />
                     </div>
                     <div className="d-flex justify-content-center">
-                        <button className="w-25 m-3" type="submit">{editingSpecialty.id ? 'Lưu' : 'Thêm'}</button>
-                        <button className="w-25 m-3" type="button" onClick={() => setEditingSpecialty(null)}>Hủy</button>
+                        <button className="w-25 m-3" type="submit">{editingService.id ? 'Lưu' : 'Thêm'}</button>
+                        <button className="w-25 m-3" type="button" onClick={() => setEditingService(null)}>Hủy</button>
                     </div>
                 </form>
             )}
             <table className="table">
                 <thead>
                 <tr>
+                    <th>Chuyên khoa</th>
                     <th>Tên</th>
                     <th>Mô tả</th>
-                    <th>Hình ảnh</th>
+                    <th>Giá</th>
                     <th>Thao tác</th>
                 </tr>
                 </thead>
                 <tbody>
-                {specialties.map((specialty) => (
-                    <tr key={specialty.id}>
-                        <td>{specialty.name}</td>
-                        <td>{specialty.description}</td>
-                        <td><img src={`https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/${specialty.image}`} alt="Specialty" width="50" /></td>
-                         <td>
-                                <button className="btn-icon edit-icon m-2" onClick={() => handleEditClick(specialty)} title="Sửa">
-                                    <i className="bi bi-pencil-fill"></i>
-                                </button>
-                                <button
-                                    className="btn-icon delete-icon"
-                                    onClick={() => {
-                                        if (window.confirm('Bạn có chắc chắn muốn xóa dịch vụ này không?')) {
-                                            handleDeleteSpecialty(specialty.id);
-                                        }
-                                    }}
-                                    title="Xóa"
-                                >
-                                    <i className="bi bi-trash-fill"></i>
-                                </button>
-                            </td>
+                {services.map((service) => (
+                    <tr key={service.id}>
+                        <td>{service.specialty_id}</td>
+                        <td>{service.name}</td>
+                        <td>{service.description}</td>
+                        <td>{new Intl.NumberFormat('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND'
+                        }).format(service.price)}</td>
+                        <td>
+                            <button className="btn-icon edit-icon m-2" onClick={() => handleEditClick(service)}
+                                    title="Sửa">
+                                <i className="bi bi-pencil-fill"></i>
+                            </button>
+                            <button
+                                className="btn-icon delete-icon"
+                                onClick={() => {
+                                    if (window.confirm('Bạn có chắc chắn muốn xóa dịch vụ này không?')) {
+                                        handleDeleteService(service.id);
+                                    }
+                                }}
+                                title="Xóa"
+                            >
+                                <i className="bi bi-trash-fill"></i>
+                            </button>
+                        </td>
                     </tr>
                 ))}
                 </tbody>
@@ -169,4 +177,4 @@ const SpecialtyList = () => {
     );
 };
 
-export default SpecialtyList;
+export default ServiceList;

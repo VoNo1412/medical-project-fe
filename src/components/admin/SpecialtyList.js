@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+
 const SpecialtyList = () => {
     const [specialties, setSpecialties] = useState([]);
-    const [formData, setFormData] = useState({ name: '', description: '' });
+    const [formData, setFormData] = useState({ name: '', description: '', image: null });
     const [editingSpecialty, setEditingSpecialty] = useState(null);
 
     useEffect(() => {
         const fetchSpecialties = async () => {
             try {
-                const response = await axios.get('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/specialties');
+                const response = await axios.get('http://localhost:8080/specialties');
                 setSpecialties(response.data);
             } catch (error) {
                 console.error('Error fetching specialties:', error);
@@ -24,12 +25,27 @@ const SpecialtyList = () => {
         setFormData({ ...formData, [name]: value });
     };
 
+    const handleFileChange = (e) => {
+        setFormData({ ...formData, image: e.target.files[0] });
+    };
+
     const handleCreateSubmit = async (e) => {
         e.preventDefault();
+        const data = new FormData();
+        data.append('name', formData.name);
+        data.append('description', formData.description);
+        if (formData.image) {
+            data.append('image', formData.image);
+        }
+
         try {
-            await axios.post('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/specialties', formData);
-            setFormData({ name: '', description: '' });
-            const response = await axios.get('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/specialties');
+            await axios.post('http://localhost:8080/specialties', data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            setFormData({ name: '', description: '', image: null });
+            const response = await axios.get('http://localhost:8080/specialties');
             setSpecialties(response.data);
         } catch (error) {
             console.error('Error creating specialty:', error);
@@ -38,11 +54,22 @@ const SpecialtyList = () => {
 
     const handleEditSubmit = async (e) => {
         e.preventDefault();
+        const data = new FormData();
+        data.append('name', formData.name);
+        data.append('description', formData.description);
+        if (formData.image) {
+            data.append('image', formData.image);
+        }
+
         try {
-            await axios.put(`https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/specialties/${editingSpecialty.id}`, formData);
-            setFormData({ name: '', description: '' });
+            await axios.put(`http://localhost:8080/specialties/${editingSpecialty.id}`, data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            setFormData({ name: '', description: '', image: null });
             setEditingSpecialty(null);
-            const response = await axios.get('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/specialties');
+            const response = await axios.get('http://localhost:8080/specialties');
             setSpecialties(response.data);
         } catch (error) {
             console.error('Error editing specialty:', error);
@@ -50,13 +77,22 @@ const SpecialtyList = () => {
     };
 
     const handleEditClick = (specialty) => {
-        setFormData({ name: specialty.name, description: specialty.description });
+        setFormData({ name: specialty.name, description: specialty.description, image: null });
         setEditingSpecialty(specialty);
+    };
+
+    const handleDeleteSpecialty = async (id) => {
+        try {
+            await axios.delete(`http://localhost:8080/specialties/${id}`);
+            setSpecialties(specialties.filter(specialty => specialty.id !== id));
+        } catch (error) {
+            console.error('Error deleting specialty:', error);
+        }
     };
 
     return (
         <div>
-            <h3>Quản lý Chuyên khoa</h3>
+            <h3>Quản lý dịch vụ</h3>
             <button className="btn btn-primary my-3" onClick={() => setEditingSpecialty({})}>Thêm</button>
             {editingSpecialty && (
                 <form onSubmit={editingSpecialty.id ? handleEditSubmit : handleCreateSubmit}>
@@ -80,6 +116,14 @@ const SpecialtyList = () => {
                             required
                         />
                     </div>
+                    <div>
+                        <label>Hình ảnh</label>
+                        <input
+                            type="file"
+                            name="image"
+                            onChange={handleFileChange}
+                        />
+                    </div>
                     <div className="d-flex justify-content-center">
                         <button className="w-25 m-3" type="submit">{editingSpecialty.id ? 'Lưu' : 'Thêm'}</button>
                         <button className="w-25 m-3" type="button" onClick={() => setEditingSpecialty(null)}>Hủy</button>
@@ -89,27 +133,34 @@ const SpecialtyList = () => {
             <table className="table">
                 <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Tên</th>
                     <th>Mô tả</th>
-                    <th>Hành động</th>
+                    <th>Hình ảnh</th>
+                    <th>Thao tác</th>
                 </tr>
                 </thead>
                 <tbody>
                 {specialties.map((specialty) => (
                     <tr key={specialty.id}>
-                        <td>{specialty.id}</td>
                         <td>{specialty.name}</td>
                         <td>{specialty.description}</td>
-                        <td>
-                            <button className="btn btn-primary" onClick={() => handleEditClick(specialty)}>Sửa</button>
-                            <button className="btn btn-warning m-2" onClick={async () => {
-                                if (window.confirm('Bạn có chắc chắn muốn xóa chuyên khoa này không?')) {
-                                    await axios.delete(`https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/specialties/${specialty.id}`);
-                                    setSpecialties(specialties.filter(s => s.id !== specialty.id));
-                                }
-                            }}>Xóa</button>
-                        </td>
+                        <td><img src={`http://localhost:8080/${specialty.image}`} alt="Specialty" width="50" /></td>
+                         <td>
+                                <button className="btn-icon edit-icon m-2" onClick={() => handleEditClick(specialty)} title="Sửa">
+                                    <i className="bi bi-pencil-fill"></i>
+                                </button>
+                                <button
+                                    className="btn-icon delete-icon"
+                                    onClick={() => {
+                                        if (window.confirm('Bạn có chắc chắn muốn xóa dịch vụ này không?')) {
+                                            handleDeleteSpecialty(specialty.id);
+                                        }
+                                    }}
+                                    title="Xóa"
+                                >
+                                    <i className="bi bi-trash-fill"></i>
+                                </button>
+                            </td>
                     </tr>
                 ))}
                 </tbody>

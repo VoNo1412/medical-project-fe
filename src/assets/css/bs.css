@@ -1,0 +1,222 @@
+/* Cấu hình chung */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+/* Header */
+h1,
+h2,
+h3,
+h4,
+h5 {
+    color: #fc8f00;
+}
+
+/* Cột bên trái (Sidebar) */
+.col-md-5 {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề bác sĩ */
+h4 {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Ảnh bác sĩ */
+img {
+    width: 80%;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+/* Các thông tin liên hệ */
+ul li {
+    margin-bottom: 10px;
+}
+
+ul li i {
+    margin-right: 8px;
+    color: #068806;
+}
+
+button.btn {
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+.form-container {
+    overflow: hidden;
+    /* Ẩn thanh cuộn */
+    padding-right: 0;
+    /* Đảm bảo không có khoảng trống vì thanh cuộn */
+}
+button.btn:hover {
+    background-color: #2980b9;
+}
+
+/* Cột bên phải (Nội dung chính) */
+.col-md-7 {
+    padding-left: 40px;
+}
+
+h2,
+h3 {
+    color: #255808;
+    font-weight: bold;
+    margin-top: 30px;
+}
+
+h5 {
+    color: #3498db;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.content ul {
+    padding-left: 20px;
+}
+
+.content ul li {
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.content ul li i {
+    margin-right: 10px;
+    color: #e67e22;
+}
+
+.content p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-top: 10px;
+    color: #555;
+}
+
+/* Thiết lập khoảng cách giữa các cột */
+.row {
+    margin-top: 20px;
+}
+
+/* Footer */
+footer {
+    background-color: #34495e;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    margin-top: 30px;
+}
+/* Thêm CSS để căn giữa modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Màu nền mờ */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #333;
+}
+
+/* Thêm một số kiểu cho form */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input,
+select,
+textarea {
+    margin-bottom: 15px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button.submit-button {
+    background-color: #029aff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button.submit-button:hover {
+    background-color: #0f58e0;
+}
+/* CSS cho phần kéo form */
+/* CSS cho phần kéo form */
+.modal-content {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: move;
+    z-index: 1000;
+    width: 700px;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: red;
+    color: white;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+}
+.form-container {
+    max-height: 600px;
+    /* Chiều cao tối đa của form */
+
+    overflow-y: auto;
+    /* Hiển thị thanh cuộn khi nội dung vượt quá chiều cao */
+}

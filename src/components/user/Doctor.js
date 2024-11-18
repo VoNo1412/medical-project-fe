@@ -1,34 +1,43 @@
-import React from 'react';
-
-const doctors = [
-    { name: 'Dr. John Doe', specialty: 'Orthodontist', experience: '10 years' },
-    { name: 'Dr. Jane Smith', specialty: 'Periodontist', experience: '8 years' },
-    { name: 'Dr. Emily Johnson', specialty: 'Prosthodontist', experience: '12 years' },
-    // Add more doctors as needed
-];
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; 
+import '../../assets/css/doctorList.css'; // Đảm bảo đã tạo và tạo kiểu cho file CSS này
 
 function DoctorList() {
+    const [doctors, setDoctors] = useState([]);
+    const navigate = useNavigate(); // Dùng để điều hướng
+
+    useEffect(() => {
+        const fetchDoctors = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/doctors');
+                setDoctors(response.data);
+            } catch (error) {
+                console.error('Error fetching doctors:', error);
+            }
+        };
+
+        fetchDoctors();
+    }, []);
+
+    // Hàm xử lý khi nhấn vào bác sĩ
+    const handleDoctorClick = (doctor) => {
+        // Dựa trên tên bác sĩ, điều hướng đến trang chi tiết
+        navigate(`/${doctor.fullname.replace(/ /g, '-').toLowerCase()}`);
+    };
+
     return (
         <section id="doctor-list">
             <h1>Danh Sách Bác Sĩ</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Tên</th>
-                        <th>Chuyên Khoa</th>
-                        <th>Kinh Nghiệm</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {doctors.map((doctor, index) => (
-                        <tr key={index}>
-                            <td>{doctor.name}</td>
-                            <td>{doctor.specialty}</td>
-                            <td>{doctor.experience}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <div className="doctor-cards">
+                {doctors.map((doctor, index) => (
+                    <div className="doctor-card" key={index} onClick={() => handleDoctorClick(doctor)}>
+                        <img src={`http://localhost:8080/${doctor.image}`} alt={`Ảnh của ${doctor.fullname}`} />
+                        <h2>{doctor.name}</h2>
+                        <p>{doctor.fullname}</p>
+                    </div>
+                ))}
+            </div>
         </section>
     );
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Header from './header';
 import Footer from './footer';
 import '../../assets/css/login.css';
+import { Bars } from 'react-loader-spinner'; // Import thư viện loader
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -15,7 +16,8 @@ function Register() {
     confirmPassword: ''
   });
   const [message, setMessage] = useState('');
-  const [isSuccess, setIsSuccess] = useState(false); // Để xác định loại thông báo
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,9 +26,9 @@ function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    // Gửi yêu cầu đăng ký đến server
-    fetch('https://nhakhoabackend-ea8ba2a9b1f1.herokuapp.com/register', {
+    fetch('http://localhost:8080/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -35,10 +37,11 @@ function Register() {
     })
       .then(response => response.json())
       .then(data => {
-        setMessage(data); // Cập nhật thông báo
-        setIsSuccess(true); // Xác định thông báo thành công hay thất bại
+        setMessage(data);
+        setIsSuccess(true);
         setTimeout(() => {
-          setMessage(''); // Tắt thông báo sau 1 giây
+          setMessage('');
+          setLoading(false);
         }, 3000);
       })
       .catch(error => {
@@ -46,7 +49,8 @@ function Register() {
         setMessage('Có lỗi xảy ra. Vui lòng thử lại.');
         setIsSuccess(false);
         setTimeout(() => {
-          setMessage(''); // Tắt thông báo sau 1 giây
+          setMessage('');
+          setLoading(false);
         }, 3000);
       });
   };
@@ -63,12 +67,12 @@ function Register() {
           <div className={`message-box ${isSuccess ? 'success' : 'error'}`}>
             {message}
           </div>
-        )} {/* Hiển thị thông báo */}
+        )}
         <form onSubmit={handleSubmit}>
-          <label htmlFor="name">Tài khoản:</label>
+          <label htmlFor="username">Tài khoản:</label>
           <input
             type="text"
-            id="name"
+            id="username"
             name="username"
             required
             placeholder="Nhập tài khoản"
@@ -76,10 +80,10 @@ function Register() {
             onChange={handleChange}
           />
 
-          <label htmlFor="name">Họ và tên:</label>
+          <label htmlFor="fullname">Họ và tên:</label>
           <input
             type="text"
-            id="name"
+            id="fullname"
             name="fullname"
             required
             placeholder="Nhập họ và tên"
@@ -154,8 +158,25 @@ function Register() {
             onChange={handleChange}
           />
 
-          <button type="submit">Đăng ký</button>
+          <button type="submit" disabled={loading}>
+            {loading ? <span className="loading">Loading...</span> : "Đăng ký"}
+          </button>
         </form>
+        {loading && (
+          <div className="loading-spinner">
+            <Bars
+              height="50"
+              width="50"
+              color="#00BFFF"
+              ariaLabel="loading"
+            />
+          </div>
+        )}
+        {message && (
+          <div className="message-box">
+            {message}
+          </div>
+        )}
         <p className="redirect">
           Đã có tài khoản? <a href="/login">Đăng nhập ngay</a>
         </p>
